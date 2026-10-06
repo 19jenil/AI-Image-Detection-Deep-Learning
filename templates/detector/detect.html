@@ -1,0 +1,312 @@
+{% extends 'detector/base.html' %}
+
+{% block page_title %}
+Image Detection
+{% endblock %}
+
+{% block content %}
+
+<div class="grid">
+
+    <section class="card upload-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    ANALYSIS WORKSPACE
+                </span>
+
+                <h2>
+                    Analyse an Image
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <form method="POST"
+              enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="upload-area" id="uploadArea">
+
+                <input
+                    type="file"
+                    name="image"
+                    id="imageInput"
+                    accept="image/*"
+                    required
+                >
+
+                <label for="imageInput" id="uploadLabel">
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+                    <strong>
+                        Upload image
+                    </strong>
+
+                    <span>
+                        PNG, JPG or JPEG
+                    </span>
+
+                </label>
+
+                <div id="imagePreviewWrapper" style="display: none;">
+
+                    <img id="imagePreview" class="preview-image" src="" alt="Selected image preview">
+
+                    <span id="imagePreviewName" class="preview-filename"></span>
+
+                    <button type="button" id="removeImageBtn" class="remove-preview-btn">
+                        Remove
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Detection Model
+                </label>
+
+                <select
+                    name="model"
+                    required>
+
+                    {% for key, model in models.items %}
+
+                    <option
+                        value="{{ key }}"
+                        {% if key not in available_models %}disabled{% endif %}
+                    >
+
+                        {{ model.name }}
+
+                        — {{ model.accuracy }}%
+
+                        {% if key not in available_models %}
+                        (coming soon)
+                        {% endif %}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="primary-btn">
+
+                Analyse Image
+
+            </button>
+
+        </form>
+
+    </section>
+
+
+    {% if result %}
+
+        {% if result.error %}
+
+        <section class="card result-card">
+
+            <div class="result-header">
+
+                <span class="eyebrow">
+                    DETECTION RESULT
+                </span>
+
+                <span class="badge danger">
+                    ERROR
+                </span>
+
+            </div>
+
+            <p class="error-message">
+                {{ result.error }}
+            </p>
+
+        </section>
+
+        {% else %}
+
+        <section class="card result-card">
+
+            <div class="result-header">
+
+                <span class="eyebrow">
+                    DETECTION RESULT
+                </span>
+
+                {% if result.prediction == "AI-Generated" %}
+
+                    <span class="badge danger">
+                        AI-GENERATED
+                    </span>
+
+                {% else %}
+
+                    <span class="badge success">
+                        REAL IMAGE
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="result-grid">
+
+                <div>
+
+                    <img
+                        src="{{ result.image_url }}"
+                        class="result-image"
+                    >
+
+                </div>
+
+
+                <div class="result-summary">
+
+                    <span class="result-label">
+                        Prediction
+                    </span>
+
+                    <h2>
+                        {{ result.prediction }}
+                    </h2>
+
+
+                    <div class="confidence">
+
+                        <div class="confidence-header">
+
+                            <span>
+                                Confidence
+                            </span>
+
+                            <strong>
+                                {{ result.confidence|floatformat:2 }}%
+                            </strong>
+
+                        </div>
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                style="
+                                width:
+                                {{ result.confidence }}%;
+                                ">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="metrics">
+
+                        <div>
+                            <span>Model</span>
+                            <strong>
+                                {{ result.model.name }}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Accuracy</span>
+                            <strong>
+                                {{ result.model.accuracy }}%
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>ROC-AUC</span>
+                            <strong>
+                                {{ result.model.auc }}%
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Processing</span>
+                            <strong>
+                                {{ result.processing_time|floatformat:3 }} s
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+<script>
+    (function () {
+        const imageInput = document.getElementById('imageInput');
+        const uploadLabel = document.getElementById('uploadLabel');
+        const previewWrapper = document.getElementById('imagePreviewWrapper');
+        const previewImg = document.getElementById('imagePreview');
+        const previewName = document.getElementById('imagePreviewName');
+        const removeBtn = document.getElementById('removeImageBtn');
+
+        imageInput.addEventListener('change', function () {
+            const file = imageInput.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file.');
+                imageInput.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+                previewName.textContent = file.name;
+                uploadLabel.style.display = 'none';
+                previewWrapper.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        removeBtn.addEventListener('click', function () {
+            imageInput.value = '';
+            previewImg.src = '';
+            previewName.textContent = '';
+            uploadLabel.style.display = '';
+            previewWrapper.style.display = 'none';
+        });
+    })();
+</script>
+
+{% endblock %}

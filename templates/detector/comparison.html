@@ -1,0 +1,120 @@
+{% extends 'detector/base.html' %}
+
+{% block page_title %}
+Model Comparison
+{% endblock %}
+
+{% block content %}
+
+<section class="card">
+
+    <span class="eyebrow">
+        EXPERIMENTAL EVALUATION
+    </span>
+
+    <h2>
+        Deep Learning Model Comparison
+    </h2>
+
+    <p class="description">
+
+        Comparative evaluation of the models trained
+        using the same CIFAKE dataset, preprocessing
+        and validation protocol.
+
+    </p>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1</th>
+                    <th>ROC-AUC</th>
+                    <th>Parameters</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for key, model in models.items %}
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ model.name }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ model.accuracy }}%
+                    </td>
+
+                    <td>
+                        {{ model.precision }}%
+                    </td>
+
+                    <td>
+                        {{ model.recall }}%
+                    </td>
+
+                    <td>
+                        {{ model.f1 }}%
+                    </td>
+
+                    <td>
+                        {{ model.auc }}%
+                    </td>
+
+                    <td>
+                        {{ model.parameters }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <span class="eyebrow">
+        RESEARCH INTERPRETATION
+    </span>
+
+    <h2>
+        Accuracy vs Computational Efficiency
+    </h2>
+
+    <p class="description">
+
+        ResNet50 currently provides the highest validation
+        performance, while MobileNetV2 achieves competitive
+        performance with substantially fewer parameters.
+        This highlights the trade-off between predictive
+        performance and computational efficiency.
+
+    </p>
+
+</section>
+
+{% endblock %}

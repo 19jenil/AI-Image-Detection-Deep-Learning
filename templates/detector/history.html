@@ -1,0 +1,103 @@
+{% extends 'detector/base.html' %}
+
+{% block page_title %}
+Prediction History
+{% endblock %}
+
+{% block content %}
+
+<section class="card">
+
+    <span class="eyebrow">
+        ANALYSIS RECORD
+    </span>
+
+    <h2>
+        Previous Predictions
+    </h2>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+                    <th>Model</th>
+                    <th>Prediction</th>
+                    <th>Confidence</th>
+                    <th>Processing Time</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for item in predictions %}
+
+                <tr>
+
+                    <td>
+                        {{ item.created_at|date:"d M Y H:i" }}
+                    </td>
+
+                    <td>
+                        {{ item.get_model_name_display }}
+                    </td>
+
+                    <td>
+
+                        {% if item.prediction == "ai_generated" %}
+
+                        <span class="badge danger">
+                            AI-Generated
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge success">
+                            Real
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ item.confidence|floatformat:2 }}%
+                    </td>
+
+                    <td>
+                        {{ item.processing_time|floatformat:3 }} sec
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="5">
+
+                        No predictions yet.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'detector/base.html' %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <span>
+            Available Models
+        </span>
+
+        <strong>3</strong>
+
+        <small>
+            Trained architectures
+        </small>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span>
+            Best Accuracy
+        </span>
+
+        <strong>98.17%</strong>
+
+        <small>
+            ResNet50 Fine-Tuned
+        </small>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span>
+            Best ROC-AUC
+        </span>
+
+        <strong>99.76%</strong>
+
+        <small>
+            ResNet50 Fine-Tuned
+        </small>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span>
+            Detection Classes
+        </span>
+
+        <strong>2</strong>
+
+        <small>
+            Real / AI-Generated
+        </small>
+
+    </div>
+
+</div>
+
+
+<div class="grid">
+
+    <section class="card">
+
+        <span class="eyebrow">
+            SYSTEM OVERVIEW
+        </span>
+
+        <h2>
+            AI Image Detection
+        </h2>
+
+        <p class="description">
+
+            This system analyses digital images using
+            deep learning models trained to distinguish
+            between authentic and AI-generated images.
+
+        </p>
+
+
+        <a
+            href="{% url 'detect' %}"
+            class="primary-btn">
+
+            Start Detection →
+
+        </a>
+
+    </section>
+
+
+    <section class="card">
+
+        <span class="eyebrow">
+            BEST PERFORMING MODEL
+        </span>
+
+        <h2>
+            ResNet50 Fine-Tuned
+        </h2>
+
+        <div class="large-metric">
+            98.17%
+        </div>
+
+        <p>
+            Validation accuracy
+        </p>
+
+        <div class="model-mini-grid">
+
+            <div>
+                <span>Precision</span>
+                <strong>98.14%</strong>
+            </div>
+
+            <div>
+                <span>Recall</span>
+                <strong>98.14%</strong>
+            </div>
+
+            <div>
+                <span>F1</span>
+                <strong>98.14%</strong>
+            </div>
+
+            <div>
+                <span>ROC-AUC</span>
+                <strong>99.76%</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

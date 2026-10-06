@@ -1,0 +1,111 @@
+{% extends 'detector/base.html' %}
+
+{% block page_title %}
+About the Research
+{% endblock %}
+
+{% block content %}
+
+<section class="card">
+
+    <span class="eyebrow">
+        RESEARCH METHODOLOGY
+    </span>
+
+    <h2>
+        AI-Generated Image Detection
+    </h2>
+
+    <p class="description">
+
+        The system investigates the effectiveness of
+        deep learning architectures for distinguishing
+        authentic images from AI-generated images.
+
+    </p>
+
+</section>
+
+
+<div class="grid">
+
+    <section class="card">
+
+        <span class="eyebrow">
+            DATASET
+        </span>
+
+        <h2>CIFAKE</h2>
+
+        <p>
+
+            The dataset contains real and synthetic
+            images used for binary classification.
+
+        </p>
+
+        <div class="large-metric">
+            118,664
+        </div>
+
+        <p>
+            Final unique images
+        </p>
+
+    </section>
+
+
+    <section class="card">
+
+        <span class="eyebrow">
+            CLASSIFICATION
+        </span>
+
+        <h2>Binary Detection</h2>
+
+        <div class="model-mini-grid">
+
+            <div>
+                <span>Class 0</span>
+                <strong>Real</strong>
+            </div>
+
+            <div>
+                <span>Class 1</span>
+                <strong>AI-Generated</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<section class="card">
+
+    <span class="eyebrow">
+        PIPELINE
+    </span>
+
+    <h2>
+        Detection Workflow
+    </h2>
+
+    <div class="pipeline">
+
+        <span>Image Upload</span>
+        →
+        <span>Preprocessing</span>
+        →
+        <span>Deep Learning Model</span>
+        →
+        <span>Probability</span>
+        →
+        <span>Classification</span>
+
+    </div>
+
+</section>
+
+{% endblock %}
